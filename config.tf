@@ -97,8 +97,8 @@ resource "yandex_compute_instance" "vm-test2" {
 
     }
 }
-# Generate inventory file
-resource "local_file" "inventory" {
+#inventory file
+resource "inv_file" "inventory" {
 filename = "/etc/ansible/hosts"
 content = <<EOF
 [build]

@@ -1,11 +1,11 @@
 ---
-- name: Install OpenJDK, Maven, Git and Build project
+- name: Deploy project
   hosts: deploy
   become: yes
   tasks:
   - name: Present docker
     ansible.builtin.apt:
-      name: "{{ item }}"
+      name: docker
       state: present
       update_cache: true
     loop:
@@ -19,8 +19,18 @@
       enabled: true
       name: docker
       
+      
   - name: Pull Docker Image
     docker_image:
         name: ebogachev/boxfuse
         source: pull
         state: present
+
+  - name: Container present
+    docker_container:
+      name: boxfuse
+      image: ebogachev/boxfuse
+      state: started
+      restart: yes
+      ports:
+       - "8080:8080"
