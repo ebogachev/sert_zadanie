@@ -4,7 +4,7 @@ pipeline {
         stage('Git checkout') {
            steps{
                 git 'https://github.com/ebogachev/sert_zadanie.git'
-                sh "cd ./sert_zadanie"            }
+                  }
         }
         stage('terraform Init') {
             steps{
@@ -22,3 +22,4 @@ pipeline {
             }
         }
     }
+}
