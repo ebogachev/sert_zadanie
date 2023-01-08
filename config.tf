@@ -84,18 +84,6 @@ resource "yandex_compute_instance" "vm-test2" {
   metadata = {
     ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
   }
-      provisioner "remote-exec" {
-        inline = [
-          "sudo apt update && sudo apt install -y git docker.io python python3-docker"
-        ]
-        connection {
-            host = self.network_interface.0.nat_ip_address
-            type = "ssh"
-            user = "ubuntu"
-            private_key = "${file("~/.ssh/id_rsa")}"
-        }
-
-    }
 }
 #inventory file
 resource "inv_file" "inventory" {
