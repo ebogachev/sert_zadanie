@@ -42,7 +42,7 @@ resource "yandex_compute_instance" "vm-test1" {
   }
     provisioner "remote-exec" {
         inline = [
-          "sudo apt update && sudo apt install -y git docker.io",
+          "sudo apt update && sudo apt install -y git docker.io python",
           "git clone https://github.com/ebogachev/sert_zadanie.git",
           "cd sert_zadanie && sudo docker build -t ebogachev/boxfuse ./",
           "sudo docker login -u ebogachev -p dckr_pat_4r9gxuckcKylCFi55qjQG_Cae-Y",
@@ -84,10 +84,23 @@ resource "yandex_compute_instance" "vm-test2" {
   metadata = {
     ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
   }
+      provisioner "remote-exec" {
+        inline = [
+          "sudo apt update && sudo apt install -y git docker.io python"
+
+        ]
+        connection {
+            host = self.network_interface.0.nat_ip_address
+            type = "ssh"
+            user = "ubuntu"
+            private_key = "${file("~/.ssh/id_rsa")}"
+        }
+
+    }
 }
 # Generate inventory file
 resource "local_file" "inventory" {
-filename = "./hosts"
+filename = "/etc/ansible/hosts"
 content = <<EOF
 [build]
 ${yandex_compute_instance.vm-test1.network_interface.0.nat_ip_address}
