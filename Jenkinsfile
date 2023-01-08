@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Git checkout') {
+        stage('Git clone') {
            steps{
                 git 'https://github.com/ebogachev/sert_zadanie.git'
                   }
