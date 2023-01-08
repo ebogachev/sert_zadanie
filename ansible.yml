@@ -1,0 +1,26 @@
+---
+- name: Install OpenJDK, Maven, Git and Build project
+  hosts: deploy
+  become: yes
+  tasks:
+  - name: Present docker
+    ansible.builtin.apt:
+      name: "{{ item }}"
+      state: present
+      update_cache: true
+    loop:
+      - docker.io
+      - python3-docker
+    become: yes
+
+  - name: Make sure a service is running
+    ansible.builtin.systemd:
+      state: started
+      enabled: true
+      name: docker
+      
+  - name: Pull Docker Image
+    docker_image:
+        name: ebogachev/boxfuse
+        source: pull
+        state: present
